@@ -10,6 +10,12 @@ async_engine = create_async_engine(
     echo=True
 )
 
+# Инициализация синхронного движка.
+sync_engine = create_engine(
+    url=settings.DATABASE_URL_pymysql,
+    echo=True
+)
+
 # Инициализация фабрики сессий.
 async_session_factory = async_sessionmaker(async_engine)
 

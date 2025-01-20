@@ -10,9 +10,15 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASSWORD: str
 
+    # Инициализация ссылки асинхронного подключения к базе данных.
     @property
     def DATABASE_URL_aiomysql(self):
         return f"mysql+aiomysql://{self.DB_USER}:{quote_plus(self.DB_PASSWORD)}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+
+    # Инициализация ссылки синхронного подключения к базе данных.
+    @property
+    def DATABASE_URL_pymysql(self):
+        return f"mysql+pymysql://{self.DB_USER}:{quote_plus(self.DB_PASSWORD)}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
     model_config = SettingsConfigDict(env_file=".env")
 

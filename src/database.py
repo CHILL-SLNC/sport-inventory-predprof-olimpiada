@@ -22,6 +22,7 @@ async_session_factory = async_sessionmaker(async_engine)
 
 # Введения типа данных "строка до 256 символов в длину".
 str_256 = Annotated[str, 256]
+str_512 = Annotated[str, 512]
 
 
 # Инициализации класса базы данных.

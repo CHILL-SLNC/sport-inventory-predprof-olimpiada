@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from src.orm import AsyncORM
 from asyncio import run
 from src.router import router as my_router
 from fastapi.middleware.cors import CORSMiddleware

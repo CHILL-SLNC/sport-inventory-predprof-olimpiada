@@ -9,12 +9,12 @@ import datetime
 # Класс для первичного ключа-id.
 intpk = Annotated[int, mapped_column(primary_key=True)]
 
+# Класс для первичного ключа-username.
+usernamepk = Annotated[str, mapped_column(String(50), primary_key=True)]
+
 # Классы для временных меток в классе ApplicationsOrm.
 created_at = Annotated[datetime.datetime, mapped_column(default=datetime.datetime.utcnow(), )]
-closed_at = Annotated[datetime.datetime, mapped_column(
-    default=datetime.datetime.utcnow(),
-    onupdate=datetime.datetime.utcnow(),
-)]
+closed_at = Annotated[datetime.datetime, mapped_column(default=None,)]
 
 
 # Enum-класс для статуса заявок на использование инвентаря.
@@ -38,9 +38,10 @@ class InventoryOrm(Base):
 # Объявляем таблицу админов.
 class AdminsOrm(Base):
     __tablename__ = 'admins'
-    id: Mapped[intpk]
-    username: Mapped[str_256]
+    login: Mapped[usernamepk]
     password: Mapped[str_256]
+    firstname: Mapped[str_256]
+    lastname: Mapped[str_256]
     purchPlans: Mapped[list["PurchasePlanOrm"]] = relationship(
         back_populates="admin"
     )
@@ -49,9 +50,10 @@ class AdminsOrm(Base):
 # Объявляем таблицу пользователей.
 class UsersOrm(Base):
     __tablename__ = 'users'
-    id: Mapped[intpk]
-    username: Mapped[str_256]
+    login: Mapped[usernamepk]
     password: Mapped[str_256]
+    firstname: Mapped[str_256]
+    lastname: Mapped[str_256]
     applications: Mapped[list["ApplicationsOrm"]] = relationship(
         back_populates='user'
     )
@@ -61,11 +63,12 @@ class UsersOrm(Base):
 class ApplicationsOrm(Base):
     __tablename__ = 'applications'
     id: Mapped[intpk]
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.login', ondelete='CASCADE'))
     created_at: Mapped[created_at]
-    closed_at: Mapped[closed_at]
+    closed_at: Mapped[closed_at | None]
     status: Mapped[ApplStatus]
-    inventoryName: Mapped[str_256]
+    inventory_id: Mapped[int]
+    inventory_name: Mapped[str_256]
     count: Mapped[int]
     comment: Mapped[str_256]
 

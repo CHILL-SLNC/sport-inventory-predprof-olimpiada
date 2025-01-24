@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     DB_PORT: int
     DB_USER: str
     DB_PASSWORD: str
+    FRONT_PORT: int
 
     # Инициализация ссылки асинхронного подключения к базе данных.
     @property

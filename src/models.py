@@ -1,13 +1,15 @@
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, func, text, Enum, DateTime, \
     CheckConstraint, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from database import Base, str_256, str_512
+from src.database import Base, str_256, str_512
 from typing import Annotated
 import enum
 import datetime
 
+# Класс для первичного ключа-id.
 intpk = Annotated[int, mapped_column(primary_key=True)]
 
+# Классы для временных меток в классе ApplicationsOrm.
 created_at = Annotated[datetime.datetime, mapped_column(default=datetime.datetime.utcnow(), )]
 closed_at = Annotated[datetime.datetime, mapped_column(
     default=datetime.datetime.utcnow(),
@@ -15,6 +17,7 @@ closed_at = Annotated[datetime.datetime, mapped_column(
 )]
 
 
+# Enum-класс для статуса заявок на использование инвентаря.
 class ApplStatus(enum.Enum):
     undConsid = 'На рассмотрении'
     denied = 'Отклонена'
@@ -39,9 +42,11 @@ class AdminsOrm(Base):
     username: Mapped[str_256]
     password: Mapped[str_256]
     purchPlans: Mapped[list["PurchasePlanOrm"]] = relationship(
-        back_populates= "admin"
+        back_populates="admin"
     )
 
+
+# Объявляем таблицу пользователей.
 class UsersOrm(Base):
     __tablename__ = 'users'
     id: Mapped[intpk]
@@ -52,6 +57,7 @@ class UsersOrm(Base):
     )
 
 
+# Объявляем таблицу заявок на инвентарь.
 class ApplicationsOrm(Base):
     __tablename__ = 'applications'
     id: Mapped[intpk]
@@ -67,6 +73,8 @@ class ApplicationsOrm(Base):
         back_populates='applications',
     )
 
+
+# Объявляем таблицу планов покупок.
 class PurchasePlanOrm(Base):
     __tablename__ = 'purch_plan'
     id: Mapped[intpk]

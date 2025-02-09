@@ -10,7 +10,15 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASSWORD: str
     FRONT_PORT: int
-
+    SECRET_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    REFRESH_TOKEN_EXPIRE_MINUTES: int
+    ADMIN_USERNAME: str
+    ADMIN_FIRST_NAME: str
+    ADMIN_LASTNAME: str
+    ADMIN_SECOND_LASTNAME: str
+    ADMIN_PASSWORD: str
     # Инициализация ссылки асинхронного подключения к базе данных.
     @property
     def DATABASE_URL_aiomysql(self):

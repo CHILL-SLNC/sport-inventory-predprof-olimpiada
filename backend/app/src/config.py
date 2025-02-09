@@ -10,10 +10,10 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASSWORD: str
     FRONT_PORT: int
+    BACK_PORT: int
     SECRET_KEY: str
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
-    REFRESH_TOKEN_EXPIRE_MINUTES: int
     ADMIN_USERNAME: str
     ADMIN_FIRST_NAME: str
     ADMIN_LASTNAME: str

@@ -3,7 +3,7 @@ from src.auth import Auth
 from src.queries.user_orm import AsyncUserORM
 from src.queries.admin_orm import AsyncAdminORM
 from src.schemas.user_schemas import UsersLoginDTO
-from src.schemas.token_schemas import Token, AccessTokenOnly
+from src.schemas.token_schemas import Token
 
 auth_router = APIRouter()
 

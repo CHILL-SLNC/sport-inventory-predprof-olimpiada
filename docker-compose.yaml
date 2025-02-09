@@ -1,0 +1,29 @@
+services:
+  backend:
+    build: ./backend
+    env_file:
+      - .env
+    ports:
+      - "${BACK_PORT}:8000"
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: "${DB_HOST}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: "${DB_NAME}"
+    restart: always
+    command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; uvicorn src.main:app --host 0.0.0.0 --port "${BACK_PORT}" --reload'
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: "${DB_NAME}"
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

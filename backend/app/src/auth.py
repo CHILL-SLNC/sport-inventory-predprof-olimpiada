@@ -12,7 +12,6 @@ from src.schemas.token_schemas import TokenData
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-refresh_expires = settings.REFRESH_TOKEN_EXPIRE_MINUTES
 access_expires = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 

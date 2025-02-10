@@ -44,9 +44,10 @@ const CatalogAdmin = () => {
                 'http://127.0.0.1:8000/inventory_update',
                 {
                     "id": inventoryId,
-                    "new_count_new": inputNumberEditNew,
-                    "new_count_broken": inputNumberEditBroken,
-                    "new_count_inuse": inputNumberEditInuse
+                    "name":inputNameNew,
+                    "count_new": inputNumberEditNew,
+                    "count_broken": inputNumberEditBroken,
+                    "count_inuse": inputNumberEditInuse
                 },
                 {withCredentials: true} // Включаем отправку куки
             );
@@ -67,7 +68,16 @@ const CatalogAdmin = () => {
     {/*Второе модальное окно*/
     }
     const [isModalOpenSecond, setIsModalOpenSecond] = useState(false);
-    const openModalSecond = () => setIsModalOpenSecond(true);
+    const openModalSecond = () => {
+        if (inventoryData) {
+            setInputNameNew(inventoryData.name || 0);
+            setInputNumberEditNew(inventoryData.count_new || 0);
+            setInputNumberEditBroken(inventoryData.count_broken || 0);
+            setInputNumberEditInuse(inventoryData.count_inuse || 0);
+        }
+        setIsModalOpenSecond(true);
+    };
+
     const closeModalSecond = () => setIsModalOpenSecond(false);
 
     const handleClickNew = () => {
@@ -86,9 +96,9 @@ const CatalogAdmin = () => {
     const [error, setError] = useState('');
     const [position, setPosition] = useState()
     const [inputNumber, setInputNumber] = useState('');
-    const [inputNumberEditNew, setInputNumberEditNew] = useState('')
-    const [inputNumberEditBroken, setInputNumberEditBroken] = useState('')
-    const [inputNumberEditInuse, setInputNumberEditInuse] = useState('')
+    const [inputNumberEditNew, setInputNumberEditNew] = useState('0')
+    const [inputNumberEditBroken, setInputNumberEditBroken] = useState('0')
+    const [inputNumberEditInuse, setInputNumberEditInuse] = useState('0')
     const [inputNameNew, setInputNameNew] = useState('')
 
     const fetchInventories = () => {
@@ -273,6 +283,10 @@ const CatalogAdmin = () => {
                                     initialValues={{
                                         size: componentSize,
                                         remember: true,
+                                        inputNameNew: inputNameNew,
+                                        inputNumberEditNew: inputNumberEditNew,
+                                        inputNumberEditBroken: inputNumberEditBroken,
+                                        inputNumberEditInuse: inputNumberEditInuse,
                                     }}
                                     onValuesChange={onFormLayoutChange}
                                     size={componentSize}
@@ -298,7 +312,7 @@ const CatalogAdmin = () => {
                                             },
                                         ]}
                                     >
-                                        <Input/>
+                                        <Input value={inputNameNew} onChange={(e) => setInputNameNew(e.target.value)} />
                                     </Form.Item>
 
                                     <Form.Item
@@ -307,6 +321,7 @@ const CatalogAdmin = () => {
                                         type="number"
                                         value={inputNumberEditNew}
                                         onChange={(e) => setInputNumberEditNew(e.target.value)}
+                                        defaultValue={0}
                                         rules={[
                                             {
                                                 required: true,
@@ -314,7 +329,7 @@ const CatalogAdmin = () => {
                                             },
                                         ]}
                                     >
-                                        <Input/>
+                                        <Input type="number" value={inputNumberEditNew} onChange={(e) => setInputNumberEditNew(e.target.value)} />
                                     </Form.Item>
 
                                     <Form.Item
@@ -323,6 +338,7 @@ const CatalogAdmin = () => {
                                         type="number"
                                         value={inputNumberEditBroken}
                                         onChange={(e) => setInputNumberEditBroken(e.target.value)}
+                                        defaultValue={0}
                                         rules={[
                                             {
                                                 required: true,
@@ -330,7 +346,8 @@ const CatalogAdmin = () => {
                                             },
                                         ]}
                                     >
-                                        <Input/>
+                                        <Input type="number" value={inputNumberEditBroken} onChange={(e) => setInputNumberEditBroken(e.target.value)} />
+
                                     </Form.Item>
 
                                     <Form.Item
@@ -339,6 +356,7 @@ const CatalogAdmin = () => {
                                         type="number"
                                         value={inputNumberEditInuse}
                                         onChange={(e) => setInputNumberEditInuse(e.target.value)}
+                                        defaultValue={0}
                                         rules={[
                                             {
                                                 required: true,
@@ -346,7 +364,7 @@ const CatalogAdmin = () => {
                                             },
                                         ]}
                                     >
-                                        <Input/>
+                                        <Input type="number" value={inputNumberEditInuse} onChange={(e) => setInputNumberEditInuse(e.target.value)} />
                                     </Form.Item>
 
                                     <Form.Item label={null}>

@@ -78,30 +78,29 @@ function Purchases() {
 
     return (
         <div className="flex ">
-            <div className="h-96 overflow-y-auto">
-                <List
-                    itemLayout="horizontal"
-                    dataSource={plan}
-                    className="rounded-lg shadow-lg w-3/4 relative container mx-auto"
-                    renderItem={(item) => (
-                        <List.Item
-                            className="mr-3 ml-3"
+
+            <List
+                itemLayout="horizontal"
+                dataSource={plan}
+                className="rounded-lg shadow-lg w-3/4 relative container mx-auto"
+                renderItem={(item) => (
+                    <List.Item
+                        className="mr-3 ml-3"
+                    >
+                        <List.Item.Meta
+                            title={`${item.inventory_name}, уникальный номер позиции: ${item.inventory_id}`}
+                            description={`Количество: ${item.count}, стоимость: ${item.cost}, поставщик: ${item.provider}`}
+                        />
+                        <Button
+                            onClick={() => handleSubmitActivate(item.id)}
+                            className="ml-3"
                         >
-                            <List.Item.Meta
-                                title={`${item.inventory_name}, уникальный номер позиции: ${item.inventory_id}`}
-                                description={`Количество: ${item.status}, стоимость: ${item.cost}, поставщик: ${item.provider}`}
-                            />
-                            <Button
-                                onClick={() => handleSubmitActivate(item.id)}
-                                className="ml-3"
-                            >
-                                Осуществить
-                            </Button>
-                        </List.Item>
-                    )}
-                />
-            </div>
-            <div className="absolute bottom-5 right-5">
+                            Осуществить
+                        </Button>
+                    </List.Item>
+                )}
+            />
+        <div className="absolute bottom-5 right-5">
                 {/* Кнопка открытия модального окна */}
                 <Flex gap="small" wrap>
                     <Button

@@ -62,7 +62,7 @@ async def get_plans(authorization: str = Header(...)) -> list[PurchPlansDTO]:
 
 @router.post("/application_comment", tags=["Администратор"],
              summary="Добавить комментарий к заявке")
-async def get_plans(comment_data: ApplicationsCommentDTO):
+async def add_comment(comment_data: ApplicationsCommentDTO):
     result = await AsyncAdminORM.add_comment(comment_data.application_id, comment_data.comment)
     return {"ok": True, "message": f"Комментарий успешно добавлен"}
 

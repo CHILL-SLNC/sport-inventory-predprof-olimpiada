@@ -112,6 +112,12 @@ function PersonalUserAccount() {
                 </Space>
             </div>
                 <List
+                    pagination={{
+                          onChange: (page) => {
+                            console.log(page);
+                          },
+                          pageSize: 2,
+                        }}
                     itemLayout="horizontal"
                     dataSource={application}
                     className="rounded-lg shadow-lg w-1/2 relative container mx-auto top-96"
@@ -121,14 +127,20 @@ function PersonalUserAccount() {
                         >
                             <List.Item.Meta
                                 title={item.inventory_name}
-                                description={`${item.status}, количество: ${item.count}`}
+                                description={<div style={{ whiteSpace: "pre-wrap" }}>
+                                {`Статус заявки: ${item.status}
+Количество: ${item.count}
+Комментарий: ${item.comment}`}
+                                </div>}
                             />
-                            <Button
-                                onClick={() => handleSubmitComplete(item.id)}
-                                className="ml-3"
-                            >
-                                Сдать инвентарь
-                            </Button>
+                            {item.status === 'Одобрена' && (
+                                <Button
+                                    onClick={() => handleSubmitComplete(item.id)}
+                                    className="ml-3"
+                                >
+                                    Сдать инвентарь
+                                </Button>
+                            )}
                         </List.Item>
                     )}
                 />

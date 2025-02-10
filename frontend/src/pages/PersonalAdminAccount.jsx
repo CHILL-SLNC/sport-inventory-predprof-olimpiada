@@ -27,8 +27,10 @@ function PersonalAdminAccount() {
     }
 
     const [isModalOpenComment, setIsModalOpenComment] = useState(false);
-
-    const openModalComment = () => setIsModalOpenComment(true);
+    const [selectedApplicationId, setSelectedApplicationId] = useState(null);
+    const openModalComment = (id) => {
+    setSelectedApplicationId(id);
+    setIsModalOpenComment(true);};
     const closeModalComment = () => setIsModalOpenComment(false);
 
     const [componentSize, setComponentSize] = useState('default');
@@ -45,9 +47,10 @@ function PersonalAdminAccount() {
             console.log(id)
             const response = await axios.post(
                 `http://127.0.0.1:8000/application_comment`,
-                {"application_id": id, "comment": comment},
+                {"application_id": selectedApplicationId, "comment": comment},
                 {withCredentials: true}
             );
+            closeModalComment();
         } catch (err) {
             console.log(err);
         }
@@ -147,6 +150,12 @@ function PersonalAdminAccount() {
                 </Space>
             </div>
                 <List
+                    pagination={{
+                      onChange: (page) => {
+                        console.log(page);
+                      },
+                      pageSize: 2,
+                    }}
                     itemLayout="horizontal"
                     dataSource={application}
                     className="rounded-lg shadow-lg w-1/2 relative container mx-auto top-96"
@@ -156,29 +165,42 @@ function PersonalAdminAccount() {
                         >
                             <List.Item.Meta
                                 title={`${item.inventory_name}, запрос от пользователя: ${item.user_id}`}
-                                description={`Статус заявки: ${item.status}, количество: ${item.count}, создана: ${item.created_at}, закрыта: ${item.closed_at}`}
-                            />
-                            <Button
-                                onClick={() => handleSubmitAccept(item.id)}
-                                className="ml-3"
-                            >
-                                Принять
-                            </Button>
-                            <Button
-                                onClick={() => handleSubmitReject(item.id)}
-                                className="ml-3"
-                            >
-                                Отклонить
-                            </Button>
+                                description={
+                                <div style={{ whiteSpace: "pre-wrap" }}>
+                                {`Статус заявки: ${item.status}
+Количество: ${item.count}
+Создана: ${item.created_at}
+Закрыта: ${item.closed_at}
+Комментарий: ${item.comment}`}
+                                </div>}
+                             />
+                            {item.status === 'На рассмотрении' && (
+                                <>
+                                    <Button
+                                        onClick={() => handleSubmitAccept(item.id)}
+                                        className="ml-3"
+                                    >
+                                        Принять
+                                    </Button>
+                                    <Button
+                                        onClick={() => handleSubmitReject(item.id)}
+                                        className="ml-3"
+                                    >
+                                        Отклонить
+                                    </Button>
+                                </>
+                            )}
                             <div>
                                 {/* кнопка открытия модального окна для комментария */}
-                                <Flex gap="small" wrap>
-                                    <Button
-                                        className="ml-3"
-                                        onClick={openModalComment}>
-                                        Добавить комментарий
-                                    </Button>
-                                </Flex>
+                                {item.status === 'Завершена' && (
+                                    <Flex gap="small" wrap>
+                                        <Button
+                                            className="ml-3"
+                                            onClick={() => openModalComment(item.id)}>
+                                            Добавить комментарий
+                                        </Button>
+                                    </Flex>
+                                )}
                                 {/* Модальное окно */}
                                 {isModalOpenComment && (
                                     <div
@@ -236,10 +258,7 @@ function PersonalAdminAccount() {
                                                     />
                                                 </Form.Item>
                                                 <Form.Item label={null}>
-                                                    <Button type="primary" onClick={() => {
-                                                        handleSubmitComment(item.id);
-                                                        closeModalComment();
-                                                    }}>
+                                                    <Button type="primary" onClick={handleSubmitComment}>
                                                         Добавить
                                                     </Button>
                                                 </Form.Item>

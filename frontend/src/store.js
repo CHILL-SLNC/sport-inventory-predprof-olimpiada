@@ -19,7 +19,6 @@ class AuthStore {
         try{
             const resp = await authService.loginUser(username, password);
             localStorage.setItem("token", resp.data.access_token);
-            console.log(resp.data.access_token)
             localStorage.setItem("isAuth", true);
 
         } catch (err) {
@@ -34,7 +33,6 @@ class AuthStore {
         try{
             const resp = await authService.loginAdmin(username, password);
             localStorage.setItem("token", resp.data.access_token);
-            console.log(resp.data.access_token)
             localStorage.setItem("isAuth", true);
         } catch (err) {
             console.log(err);

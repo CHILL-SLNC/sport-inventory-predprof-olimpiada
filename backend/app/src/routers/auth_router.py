@@ -24,7 +24,7 @@ async def login_for_access_token(user_data: UsersLoginDTO) -> Token:
         hashed_password = await AsyncAdminORM.get_password(username)
     else:
         raise HTTPException(409, detail="Incorrect role")
-    if Auth.verify_password(password, hashed_password):
+    if await Auth.verify_password(password, hashed_password):
         access_token = await Auth.create_access_token(username, role)
         return Token(access_token=access_token, token_type="bearer")
     raise credentials_exception
